@@ -1,5 +1,7 @@
+import { Container } from 'react-bootstrap';
+
 const PersonalDetails = (props) => {
-	return <div>Personal Details</div>;
+	return <Container>Personal Details</Container>;
 };
 
 export default PersonalDetails;
