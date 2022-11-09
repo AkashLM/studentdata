@@ -1,25 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { Routes, Route } from 'react-router-dom';
+import PersonalDetails from './components/PersonalDetails/PersonalDetails';
+import FamilyDetails from './components/FamilyDetails/FamilyDetails';
+import Missing from './components/Missing';
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<Routes>
+			<Route path="/" element={<PersonalDetails />} />
+			<Route path="/familyDetails" element={<FamilyDetails />} />
+			<Route path="/*" element={<Missing />} />
+		</Routes>
+	);
 }
 
 export default App;
