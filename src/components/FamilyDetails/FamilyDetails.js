@@ -1,15 +1,16 @@
 import { Fragment, useState } from 'react';
 import { Container, Button, FloatingLabel, Form, Row, Col, Collapse, Image } from 'react-bootstrap';
 import { done } from '../images';
-import config from '../../config.json';
-import { db } from '../firebase-config';
-import { doc, updateDoc } from 'firebase/firestore';
+
 const FamilyDetails = (props) => {
 	const [ open, setOpen ] = useState(false);
 	const [ saved, setSaved ] = useState(false);
 	const [ fatherName, setFatherName ] = useState('');
 	const [ motherName, setMotherName ] = useState('');
 	const [ legalGuardiansName, setLegalGuardiansName ] = useState('');
+	const [ sibling1, setSibling1 ] = useState({ name: '', Qualification: '', Occupation: '', Contact: '' });
+	const [ sibling2, setSibling2 ] = useState({ name: '', Qualification: '', Occupation: '', Contact: '' });
+	const [ sibling3, setSibling3 ] = useState({ name: '', Qualification: '', Occupation: '', Contact: '' });
 	const [ occupation, setOccupation ] = useState({
 		mothers: '',
 		fathers: '',
@@ -36,15 +37,12 @@ const FamilyDetails = (props) => {
 		legalguardians: ''
 	});
 	const [ hobbies, setHobies ] = useState('');
-	const doc_name = props.ID;
 
 	const onSubmitHandler = async (e) => {
 		e.preventDefault();
 		try {
-			console.log('triggered');
-			const docRef = doc(db, config.collectionName, doc_name);
-			updateDoc(docRef, {
-				FatherName: fatherName,
+			const data = {
+				FathersName: fatherName,
 				MotherName: motherName,
 				LegalGuardiansName: legalGuardiansName,
 				MothersOccupation: occupation.mothers,
@@ -62,11 +60,24 @@ const FamilyDetails = (props) => {
 				FathersAnnualIncome: annualIncome.fathers,
 				MothersAnnualIncome: annualIncome.mothers,
 				LegalGuardiansAnnualIncome: annualIncome.legalguardians,
-				Hobbies: hobbies
-			}).then(() => {
-				// setOpen(false);
-				// setSaved(true);
-			});
+				Hobbies: hobbies,
+				Sibling1Name: sibling1.name.length > 0 ? sibling1.name : 'NA',
+				Sibling1Contact: sibling1.name.length > 0 ? sibling1.Contact : 'NA',
+				Sibling1Occupation: sibling1.name.length > 0 ? sibling1.Occupation : 'NA',
+				Sibling1Qualification: sibling1.name.length > 0 ? sibling1.Qualification : 'NA',
+				Sibling2Name: sibling2.name.length > 0 ? sibling2.name : 'NA',
+				Sibling2Contact: sibling2.name.length > 0 ? sibling2.Contact : 'NA',
+				Sibling2Occupation: sibling2.name.length > 0 ? sibling2.Occupation : 'NA',
+				Sibling2Qualification: sibling2.name.length > 0 ? sibling2.Qualification : 'NA',
+				Sibling3Name: sibling3.name.length > 0 ? sibling3.name : 'NA',
+				Sibling3Contact: sibling3.name.length > 0 ? sibling3.Contact : 'NA',
+				Sibling3Occupation: sibling3.name.length > 0 ? sibling3.Occupation : 'NA',
+				Sibling3Qualification: sibling3.name.length > 0 ? sibling3.Qualification : 'NA'
+			};
+			props.setData(data);
+			setOpen(false);
+			setSaved(true);
+			props.acadDetails(true);
 		} catch (e) {
 			console.log(e);
 		}
@@ -425,6 +436,7 @@ const FamilyDetails = (props) => {
 						<FloatingLabel controlId="floatingTextarea2" label="Hobbies And Future Intrests">
 							<Form.Control
 								as="textarea"
+								defaultValue={hobbies}
 								placeholder="Leave a comment here"
 								style={{ height: '100px' }}
 								onChange={(e) => {
@@ -433,15 +445,222 @@ const FamilyDetails = (props) => {
 							/>
 						</FloatingLabel>
 						<h1>Sibling Details</h1>
-						!!pending
+
+						<Row className="g-2">
+							<Col md>
+								<FloatingLabel controlId="floatingInputName" label="Sibling 1 Name" className="mb-3">
+									<Form.Control
+										defaultValue={sibling1.name}
+										onChange={(e) => {
+											setSibling1((prev) => {
+												return { ...prev, name: e.target.value };
+											});
+										}}
+										type="text"
+										placeholder="occ"
+										required
+									/>
+								</FloatingLabel>
+							</Col>
+							<Col md>
+								<FloatingLabel controlId="floatingInputName" label="Sibling 2 Name" className="mb-3">
+									<Form.Control
+										defaultValue={sibling2.name}
+										onChange={(e) => {
+											setSibling2((prev) => {
+												return { ...prev, name: e.target.value };
+											});
+										}}
+										type="text"
+										placeholder="occ"
+										required
+									/>
+								</FloatingLabel>
+							</Col>
+							<Col md>
+								<FloatingLabel controlId="floatingInputName" label="Sibling 3 Name" className="mb-3">
+									<Form.Control
+										defaultValue={sibling3.name}
+										onChange={(e) => {
+											setSibling3((prev) => {
+												return { ...prev, name: e.target.value };
+											});
+										}}
+										type="text"
+										placeholder="occ"
+										required
+									/>
+								</FloatingLabel>
+							</Col>
+						</Row>
+						<Row className="g-2">
+							<Col md>
+								<FloatingLabel
+									controlId="floatingInputName"
+									label="Sibling 1 Qualification"
+									className="mb-3"
+								>
+									<Form.Control
+										defaultValue={sibling1.Qualification}
+										onChange={(e) => {
+											setSibling1((prev) => {
+												return { ...prev, Qualification: e.target.value };
+											});
+										}}
+										type="text"
+										placeholder="occ"
+										required
+									/>
+								</FloatingLabel>
+							</Col>
+							<Col md>
+								<FloatingLabel
+									controlId="floatingInputName"
+									label="Sibling 2 Qualification"
+									className="mb-3"
+								>
+									<Form.Control
+										defaultValue={sibling2.Qualification}
+										onChange={(e) => {
+											setSibling2((prev) => {
+												return { ...prev, Qualification: e.target.value };
+											});
+										}}
+										type="text"
+										placeholder="occ"
+										required
+									/>
+								</FloatingLabel>
+							</Col>
+							<Col md>
+								<FloatingLabel
+									controlId="floatingInputName"
+									label="Sibling 3 Qualification"
+									className="mb-3"
+								>
+									<Form.Control
+										defaultValue={sibling3.Qualification}
+										onChange={(e) => {
+											setSibling3((prev) => {
+												return { ...prev, Qualification: e.target.value };
+											});
+										}}
+										type="text"
+										placeholder="occ"
+										required
+									/>
+								</FloatingLabel>
+							</Col>
+						</Row>
+						<Row className="g-2">
+							<Col md>
+								<FloatingLabel
+									controlId="floatingInputName"
+									label="Sibling 1 Occupation"
+									className="mb-3"
+								>
+									<Form.Control
+										defaultValue={sibling1.Occupation}
+										onChange={(e) => {
+											setSibling1((prev) => {
+												return { ...prev, Occupation: e.target.value };
+											});
+										}}
+										type="text"
+										placeholder="occ"
+										required
+									/>
+								</FloatingLabel>
+							</Col>
+							<Col md>
+								<FloatingLabel
+									controlId="floatingInputName"
+									label="Sibling 2 Occupation"
+									className="mb-3"
+								>
+									<Form.Control
+										defaultValue={sibling2.Occupation}
+										onChange={(e) => {
+											setSibling2((prev) => {
+												return { ...prev, Occupation: e.target.value };
+											});
+										}}
+										type="text"
+										placeholder="occ"
+										required
+									/>
+								</FloatingLabel>
+							</Col>
+							<Col md>
+								<FloatingLabel
+									controlId="floatingInputName"
+									label="Sibling 3 Occupation"
+									className="mb-3"
+								>
+									<Form.Control
+										defaultValue={sibling3.Occupation}
+										onChange={(e) => {
+											setSibling3((prev) => {
+												return { ...prev, Occupation: e.target.value };
+											});
+										}}
+										type="text"
+										placeholder="occ"
+										required
+									/>
+								</FloatingLabel>
+							</Col>
+						</Row>
+						<Row className="g-2">
+							<Col md>
+								<FloatingLabel controlId="floatingInputName" label="Sibling 1 Contact" className="mb-3">
+									<Form.Control
+										defaultValue={sibling1.Contact}
+										onChange={(e) => {
+											setSibling1((prev) => {
+												return { ...prev, Contact: e.target.value };
+											});
+										}}
+										type="text"
+										placeholder="occ"
+										required
+									/>
+								</FloatingLabel>
+							</Col>
+							<Col md>
+								<FloatingLabel controlId="floatingInputName" label="Sibling 2 Contact" className="mb-3">
+									<Form.Control
+										defaultValue={sibling2.Contact}
+										onChange={(e) => {
+											setSibling2((prev) => {
+												return { ...prev, Contact: e.target.value };
+											});
+										}}
+										type="text"
+										placeholder="occ"
+										required
+									/>
+								</FloatingLabel>
+							</Col>
+							<Col md>
+								<FloatingLabel controlId="floatingInputName" label="Sibling 3 Contact" className="mb-3">
+									<Form.Control
+										defaultValue={sibling3.Contact}
+										onChange={(e) => {
+											setSibling3((prev) => {
+												return { ...prev, Contact: e.target.value };
+											});
+										}}
+										type="text"
+										placeholder="occ"
+										required
+									/>
+								</FloatingLabel>
+							</Col>
+						</Row>
+
 						<div className="col-md-12 text-center">
-							<Button
-								style={{ postion: 'relative', right: 50 }}
-								className=" mt-3 mb-3"
-								type="button"
-								onClick={onSubmitHandler}
-								variant="primary"
-							>
+							<Button className=" mt-3 mb-3" type="button" onClick={onSubmitHandler} variant="primary">
 								submit
 							</Button>
 						</div>

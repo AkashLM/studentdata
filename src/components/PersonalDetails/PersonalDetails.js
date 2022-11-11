@@ -2,9 +2,7 @@ import { Fragment, useState } from 'react';
 import { Container, Button, FloatingLabel, Form, Row, Col, Collapse, Image } from 'react-bootstrap';
 import { done } from '../images';
 import './PersonalDetails.css';
-import { db } from '../firebase-config';
-import { doc, setDoc } from 'firebase/firestore';
-import config from '../../config.json';
+
 const PersonalDetails = (props) => {
 	const [ email, setEmail ] = useState('');
 	const [ medication, setMedication ] = useState('');
@@ -34,7 +32,7 @@ const PersonalDetails = (props) => {
 	const onSubmitHandler = async (e) => {
 		e.preventDefault();
 		try {
-			setDoc(doc(db, config.collectionName, aadhar), {
+			const data = {
 				Name: name,
 				Email: email,
 				Medication: medication,
@@ -51,16 +49,15 @@ const PersonalDetails = (props) => {
 				Height: height,
 				Weight: weight,
 				BMI: bmi,
-				isPhysicallyDisablity: physicalDisablity,
-				PhysicalDisablityDescription:
+				isPhysicallyDisabled: physicalDisablity ? physicalDisablity : 'FALSE',
+				PhysicalDisabilityDescription:
 					physicalDisablityDescription.length > 0 ? physicalDisablityDescription : 'NA',
 				District: district
-			}).then((e) => {
-				props.setID(aadhar);
-				props.famDetails(true);
-				setOpen(false);
-				setSaved(true);
-			});
+			};
+			props.setData(data);
+			props.famDetails(true);
+			setOpen(false);
+			setSaved(true);
 		} catch (e) {
 			console.log(e);
 		}
@@ -76,7 +73,7 @@ const PersonalDetails = (props) => {
 					className="mb-3"
 					aria-expanded={open}
 				>
-					edit
+					ADD
 				</Button>
 			)}
 			<Collapse in={open}>
@@ -223,13 +220,17 @@ const PersonalDetails = (props) => {
 						</Row>
 						<Row className="g-2">
 							<Col md>
-								<FloatingLabel controlId="floatingInputDOB" label="Date of Birth" className="mb-3">
+								<FloatingLabel
+									controlId="floatingInputDOB"
+									label="Date of Birth(DD/MM/YYYY)"
+									className="mb-3"
+								>
 									<Form.Control
 										defaultValue={dob}
 										onChange={(e) => {
 											setDOB(e.target.value);
 										}}
-										type="date"
+										type="text"
 										placeholder="name"
 										required
 									/>
