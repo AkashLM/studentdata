@@ -13,7 +13,7 @@ const PersonalDetails = (props) => {
 	const [ drivingLicence, setDrivingLicence ] = useState('');
 	// const [ prn, setPRN ] = useState('');
 	const [ phone, setPhone ] = useState('');
-	const [ name, setName ] = useState('');
+	const [ name, setName ] = useState({ firstName: '', middleName: '', lastName: '' });
 	const [ dob, setDOB ] = useState('');
 	const [ dobPlace, setDobPlace ] = useState('');
 	const [ permanentAddress, setPermanentAddress ] = useState('');
@@ -33,7 +33,9 @@ const PersonalDetails = (props) => {
 		e.preventDefault();
 		try {
 			const data = {
-				Name: name,
+				FirstName: name.firstName,
+				MiddleName: name.middleName,
+				LastName: name.lastName,
 				Email: email,
 				Medication: medication,
 				Yoga: yoga,
@@ -67,29 +69,67 @@ const PersonalDetails = (props) => {
 			{saved ? (
 				<Image src={done} style={{ width: 30 }} className="mb-3" />
 			) : (
-				<Button
-					onClick={() => setOpen(!open)}
-					aria-controls="example-collapse-text"
-					className="mb-3"
-					aria-expanded={open}
-				>
-					ADD
-				</Button>
+				<div style={{ color: '003B4E', textAlign: 'center' }}>
+					<Button
+						onClick={() => setOpen(!open)}
+						aria-controls="example-collapse-text"
+						className="mb-3"
+						aria-expanded={open}
+					>
+						ADD
+					</Button>
+				</div>
 			)}
 			<Collapse in={open}>
 				<Container style={{ marginTop: 10 }}>
 					<Form>
-						<FloatingLabel controlId="floatingInputName" label="Name" className="mb-3">
-							<Form.Control
-								defaultValue={name}
-								onChange={(e) => {
-									setName(e.target.value);
-								}}
-								type="text"
-								placeholder="name"
-								required
-							/>
-						</FloatingLabel>
+						<Row>
+							<Col>
+								<FloatingLabel controlId="floatingInputName" label=" First Name" className="mb-3">
+									<Form.Control
+										defaultValue={name.firstName}
+										onChange={(e) => {
+											setName((prev) => {
+												return { ...prev, firstName: e.target.value };
+											});
+										}}
+										type="text"
+										placeholder="name"
+										required
+									/>
+								</FloatingLabel>
+							</Col>
+							<Col>
+								<FloatingLabel controlId="floatingInputName" label=" Middle Name" className="mb-3">
+									<Form.Control
+										defaultValue={name.middleName}
+										onChange={(e) => {
+											setName((prev) => {
+												return { ...prev, middleName: e.target.value };
+											});
+										}}
+										type="text"
+										placeholder="name"
+										required
+									/>
+								</FloatingLabel>
+							</Col>
+							<Col>
+								<FloatingLabel controlId="floatingInputName" label="Last Name" className="mb-3">
+									<Form.Control
+										defaultValue={name.lastName}
+										onChange={(e) => {
+											setName((prev) => {
+												return { ...prev, lastName: e.target.value };
+											});
+										}}
+										type="text"
+										placeholder="name"
+										required
+									/>
+								</FloatingLabel>
+							</Col>
+						</Row>
 						<FloatingLabel controlId="floatingInputEmail" label="Email address" className="mb-3">
 							<Form.Control
 								defaultValue={email}

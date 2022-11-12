@@ -87,14 +87,16 @@ const FamilyDetails = (props) => {
 			{saved ? (
 				<Image src={done} style={{ width: 30 }} className="mb-3" />
 			) : (
-				<Button
-					onClick={() => setOpen(!open)}
-					aria-controls="example-collapse-text"
-					className="mb-3"
-					aria-expanded={open}
-				>
-					edit
-				</Button>
+				<div style={{ color: '003B4E', textAlign: 'center' }}>
+					<Button
+						onClick={() => setOpen(!open)}
+						aria-controls="example-collapse-text"
+						className="mb-3"
+						aria-expanded={open}
+					>
+						edit
+					</Button>
+				</div>
 			)}
 			<Collapse in={open}>
 				<Container style={{ marginTop: 10 }}>
