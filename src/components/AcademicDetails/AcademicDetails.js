@@ -7,6 +7,7 @@ import axios from 'axios';
 const AcademicDetails = (props) => {
 	const [ open, setOpen ] = useState(false);
 	const [ saved, setSaved ] = useState(false);
+	const [ResData, setResData ] = useState({});
 
 	const [ highschoolDetails, setHighschoolDetails ] = useState({
 		Physics: '',
@@ -61,12 +62,12 @@ const AcademicDetails = (props) => {
 				_CExam: examType,
 				_12Type: highSchoolType
 			};
-			axios.post(config.sheetURL, data).then((resp) => {
-				console.log(resp);
-				setOpen(false);
-				setSaved(true);
-				props.showBtn(true);
-			});
+			
+			const sendData =  axios.post("http://localhost:8080/api/v1/AddStudentProfile",data );
+			if(sendData){
+				setResData((await sendData).data.data)
+				console.log("------->",ResData);
+			}
 		} catch (e) {
 			console.log(e);
 		}
