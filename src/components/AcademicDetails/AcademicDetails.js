@@ -77,7 +77,7 @@ const AcademicDetails = (props) => {
       };
 
       axios
-        .post("https://imp-5vyh.onrender.com/api/v1/AddStudentProfile", data)
+        .post("https://mentorship-b27v.onrender.com/api/v1/AddStudentProfile", data)
         .then((response) => {
           setResData(response?.data?.data);
           alert(" Your Information has been sent successfully ! 🤩");
